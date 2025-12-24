@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>年度預算分析儀表板</title>
+    <!-- 載入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 載入 React 與 Babel -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <style>
+        /* 自定義滾動條樣式 */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        body {
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useMemo } = React;
+        
+        // 自定義 SVG 圖示組件 - 已修復 Fragment 語法錯誤
+        const Icon = ({ name, size = 18, className = "" }) => {
+            const icons = {
+                PieChart: <path d="M21.21 15.89A10 10 0 1 1 8 2.83M22 12A10 10 0 0 0 12 2v10z" />,
+                BarChart: <path d="M12 20V10M18 20V4M6 20v-4" />,
+                TrendingUp: <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />,
+                Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />,
+                Trophy: <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z" />,
+                Settings: (
+                    <>
+                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
+                        <circle cx="12" cy="12" r="3" />
+                    </>
+                ),
+                ShieldCheck: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4" />,
+                Globe: (
+                    <>
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="2" y1="12" x2="22" y2="12" />
+                        <line x1="12" y1="2" x2="12" y2="22" />
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                    </>
+                ),
+                Building2: <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4" />,
+                Info: (
+                    <>
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="16" x2="12" y2="12" />
+                        <line x1="12" y1="8" x2="12.01" y2="8" />
+                    </>
+                )
+            };
+
+            return (
+                <svg 
+                    width={size} 
+                    height={size} 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round" 
+                    className={className}
+                >
+                    {icons[name] || null}
+                </svg>
+            );
+        };
+
+        const App = () => {
+            const rawData = [
+                { name: "賽事排程 (主要)", value: 23140980, category: "國際賽排程" },
+                { name: "地區發展計畫", value: 899244, category: "辦公室與地區發展" },
+                { name: "辦公室開銷", value: 4658544, category: "辦公室與地區發展" },
+                { name: "校際聯賽預賽(區域聯賽)", value: 411550, category: "國內賽事營運" },
+                { name: "X 聯賽", value: 1250000, category: "國內賽事營運" },
+                { name: "BMC", value: 2301200, category: "國內賽事營運" },
+                { name: "LIT", value: 2300000, category: "國內賽事營運" },
+                { name: "人資", value: 29800000, category: "人事行政" },
+                { name: "代表隊 Heritage 場地", value: 1634400, category: "代表隊與防護" },
+                { name: "體適能計劃", value: 108000, category: "代表隊與防護" },
+                { name: "防護", value: 360480, category: "代表隊與防護" },
+                { name: "治療", value: 70000, category: "代表隊與防護" },
+                { name: "禁藥及課程規劃", value: 41500, category: "代表隊與防護" },
+                { name: "種子計畫", value: 780000, category: "發展與教育" },
+                { name: "裁判研習", value: 403000, category: "發展與教育" },
+                { name: "教練研習", value: 250000, category: "發展與教育" },
+                { name: "獎學金", value: 700000, category: "發展與教育" },
+                { name: "學校發展計畫", value: 1000000, category: "發展與教育" },
+                { name: "裝備採購 - 代表隊", value: 2500000, category: "採購與行政" },
+                { name: "裝備採購 - 發展", value: 1300000, category: "採購與行政" },
+                { name: "會計", value: 360000, category: "採購與行政" },
+                { name: "硬體、紀念品採購、商品部", value: 509500, category: "採購與行政" },
+                { name: "國際組織 - 會費", value: 200000, category: "採購與行政" },
+                { name: "雜支 (運費、車保等)", value: 520000, category: "採購與行政" },
+                { name: "耗材", value: 538789, category: "採購與行政" },
+                { name: "軟體平台", value: 500000, category: "採購與行政" },
+                { name: "公關", value: 495000, category: "採購與行政" }
+            ];
+
+            const totalBudget = useMemo(() => rawData.reduce((acc, curr) => acc + curr.value, 0), []);
+            
+            const categorySummary = useMemo(() => {
+                const summary = {};
+                rawData.forEach(item => {
+                    summary[item.category] = (summary[item.category] || 0) + item.value;
+                });
+                return Object.entries(summary).sort((a, b) => b[1] - a[1]);
+            }, []);
+
+            const sortedData = [...rawData].sort((a, b) => b.value - a.value);
+
+            const formatCurrency = (val) => {
+                return new Intl.NumberFormat('zh-TW', { style: 'currency', currency: 'TWD', maximumFractionDigits: 0 }).format(val);
+            };
+
+            const getCategoryColor = (cat) => {
+                const colors = {
+                    "人事行政": "bg-blue-600",
+                    "國際賽排程": "bg-indigo-600",
+                    "國內賽事營運": "bg-emerald-500",
+                    "辦公室與地區發展": "bg-amber-500",
+                    "代表隊與防護": "bg-rose-500",
+                    "發展與教育": "bg-teal-500",
+                    "採購與行政": "bg-slate-400"
+                };
+                return colors[cat] || "bg-gray-400";
+            };
+
+            const getCategoryIconName = (cat) => {
+                switch(cat) {
+                    case "人事行政": return "Users";
+                    case "國際賽排程": return "Globe";
+                    case "國內賽事營運": return "Trophy";
+                    case "辦公室與地區發展": return "Building2";
+                    case "代表隊與防護": return "ShieldCheck";
+                    case "發展與教育": return "TrendingUp";
+                    default: return "Settings";
+                }
+            };
+
+            return (
+                <div className="min-h-screen p-4 md:p-8 text-slate-900 font-sans">
+                    <div className="max-w-6xl mx-auto space-y-8">
+                        
+                        {/* 標題區域 */}
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                            <div>
+                                <h1 className="text-3xl font-bold text-slate-800">預算分配深度分析</h1>
+                                <p className="text-slate-500 mt-2">穩定部署版：已修正圖示組件語法錯誤</p>
+                            </div>
+                            <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-end">
+                                <span className="text-sm font-medium text-slate-400 uppercase tracking-wider">總預算規模</span>
+                                <span className="text-4xl font-black text-indigo-600 tracking-tight">{formatCurrency(totalBudget)}</span>
+                            </div>
+                        </div>
+
+                        {/* 主要數據網格 */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            
+                            {/* 類別分配比例 */}
+                            <div className="lg:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col">
+                                <div className="flex items-center gap-2 mb-6">
+                                    <Icon name="PieChart" className="text-indigo-500" />
+                                    <h2 className="text-xl font-bold">新類別分配佔比</h2>
+                                </div>
+                                <div className="space-y-4 flex-grow">
+                                    {categorySummary.map(([category, value]) => (
+                                        <div key={category}>
+                                            <div className="flex justify-between items-end mb-1">
+                                                <span className="text-sm font-semibold flex items-center gap-2">
+                                                    <span className={`w-2 h-2 rounded-full ${getCategoryColor(category)}`}></span>
+                                                    {category}
+                                                </span>
+                                                <span className="text-xs font-mono text-slate-500">
+                                                    {((value / totalBudget) * 100).toFixed(1)}%
+                                                </span>
+                                            </div>
+                                            <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+                                                <div 
+                                                    className={`${getCategoryColor(category)} h-full transition-all duration-1000 ease-out`}
+                                                    style={{ width: `${(value / totalBudget) * 100}%` }}
+                                                ></div>
+                                            </div>
+                                            <div className="text-right mt-1">
+                                                <span className="text-sm font-medium text-slate-700">{formatCurrency(value)}</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* 排行榜 */}
+                            <div className="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 h-[500px] flex flex-col">
+                                <div className="flex items-center justify-between mb-6">
+                                    <div className="flex items-center gap-2">
+                                        <Icon name="BarChart" className="text-emerald-500" />
+                                        <h2 className="text-xl font-bold">細項排名 (依金額)</h2>
+                                    </div>
+                                    <span className="text-xs text-slate-400">共計 {rawData.length} 個細項</span>
+                                </div>
+                                <div className="overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+                                    {sortedData.map((item, idx) => (
+                                        <div key={item.name} className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-xl transition-colors">
+                                            <span className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-500 rounded-lg text-xs font-bold">
+                                                {idx + 1}
+                                            </span>
+                                            <div className="flex-grow min-w-0">
+                                                <div className="flex justify-between items-start mb-1">
+                                                    <h3 className="text-sm font-bold truncate pr-4 text-slate-700">{item.name}</h3>
+                                                    <span className="text-sm font-bold text-slate-900 whitespace-nowrap">{formatCurrency(item.value)}</span>
+                                                </div>
+                                                <div className="flex items-center gap-2">
+                                                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold text-white uppercase ${getCategoryColor(item.category)}`}>
+                                                        {item.category}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 功能分類卡片 */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            {categorySummary.map(([category, total]) => (
+                                <div key={category} className="bg-white p-5 rounded-2xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
+                                    <div className="flex items-center justify-between mb-4">
+                                        <div className={`p-2 rounded-xl bg-opacity-10 ${getCategoryColor(category).replace('bg-', 'text-')} ${getCategoryColor(category).replace('bg-', 'bg-')}`}>
+                                            <Icon name={getCategoryIconName(category)} />
+                                        </div>
+                                        <div className="text-right">
+                                            <p className="text-[10px] font-bold text-slate-400 uppercase">佔比</p>
+                                            <p className="text-xs font-bold text-indigo-600">{((total / totalBudget) * 100).toFixed(1)}%</p>
+                                        </div>
+                                    </div>
+                                    <h3 className="text-lg font-bold text-slate-800 leading-tight h-12 flex items-center">{category}</h3>
+                                    <p className="text-2xl font-black text-slate-900 mt-1">{formatCurrency(total)}</p>
+                                    <div className="mt-4 pt-4 border-t border-slate-50">
+                                        <ul className="space-y-2">
+                                            {rawData.filter(i => i.category === category).slice(0, 3).map(i => (
+                                                <li key={i.name} className="flex justify-between text-xs text-slate-500">
+                                                    <span className="truncate max-w-[120px]">{i.name}</span>
+                                                    <span className="font-medium text-slate-700">{formatCurrency(i.value)}</span>
+                                                </li>
+                                            ))}
+                                            {rawData.filter(i => i.category === category).length > 3 && (
+                                                <li className="text-[10px] text-indigo-500 font-bold italic">以及其他...</li>
+                                            )}
+                                        </ul>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="flex items-center gap-2 text-slate-400 text-xs px-2 pb-8">
+                            <Icon name="Info" size={14} />
+                            <p>本版本為自給自足 HTML 部署版。已修復 JSX 語法錯誤，現在可於任何瀏覽器穩定顯示。</p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
