@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2026 Annual Budget & Income Analysis</title>
+    <title>Financial Report: 2025 Actuals vs 2026 Budget</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- React & Babel -->
@@ -29,8 +29,11 @@
         body {
             background-color: #f8fafc;
         }
-        .expense-gradient {
-            background: linear-gradient(135deg, #e11d48 0%, #f59e0b 100%);
+        .budget-gradient {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+        }
+        .actual-gradient {
+            background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%);
         }
         .income-card-bg {
             background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
@@ -51,13 +54,6 @@
                 TrendingUp: <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />,
                 Users: <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />,
                 Trophy: <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6M18 9h1.5a2.5 2.5 0 0 0 0-5H18M4 22h16M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22M18 2H6v7a6 6 0 0 0 12 0V2z" />,
-                Settings: (
-                    <Fragment>
-                        <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z" />
-                        <circle cx="12" cy="12" r="3" />
-                    </Fragment>
-                ),
-                ShieldCheck: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4" />,
                 Globe: (
                     <Fragment>
                         <circle cx="12" cy="12" r="10" />
@@ -67,24 +63,25 @@
                     </Fragment>
                 ),
                 Building2: <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 12h2a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4" />,
-                Info: (
-                    <Fragment>
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="16" x2="12" y2="12" />
-                        <line x1="12" y1="8" x2="12.01" y2="8" />
-                    </Fragment>
-                ),
-                PlusCircle: (
-                    <Fragment>
-                        <circle cx="12" cy="12" r="10" />
-                        <line x1="12" y1="8" x2="12" y2="16" />
-                        <line x1="8" y1="12" x2="16" y2="12" />
-                    </Fragment>
-                ),
+                ShieldCheck: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10zM9 12l2 2 4-4" />,
                 DollarSign: (
                     <Fragment>
                         <line x1="12" y1="1" x2="12" y2="23" />
                         <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                    </Fragment>
+                ),
+                Activity: <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />,
+                ArrowUpRight: (
+                    <Fragment>
+                        <polyline points="7 7 17 7 17 17" />
+                        <line x1="7" y1="17" x2="17" y2="7" />
+                    </Fragment>
+                ),
+                History: (
+                    <Fragment>
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                        <path d="M12 7v5l4 2" />
                     </Fragment>
                 )
             };
@@ -114,62 +111,60 @@
                 { name: "Tournament & Event Revenue", value: 300000, category: "Operations" }
             ];
 
-            // Expense Data (Categorized)
-            const expenseData = [
-                { name: "Tournament Scheduling (Main)", value: 23140980, category: "Intl. Tournaments" },
-                { name: "Regional Development Plan", value: 899244, category: "Office & Regional" },
-                { name: "Office Expenses", value: 4658544, category: "Office & Regional" },
-                { name: "Inter-school League Prelims", value: 411550, category: "Domestic Ops" },
-                { name: "X League", value: 1250000, category: "Domestic Ops" },
-                { name: "BMC", value: 2301200, category: "Domestic Ops" },
-                { name: "LIT", value: 2300000, category: "Domestic Ops" },
-                { name: "Human Resources", value: 29800000, category: "Personnel & Admin" },
-                { name: "National Team Heritage Venue", value: 1634400, category: "National Team & Protection" },
-                { name: "Physical Fitness Plan", value: 108000, category: "National Team & Protection" },
-                { name: "Athletic Training", value: 360480, category: "National Team & Protection" },
-                { name: "Medical Treatment", value: 70000, category: "National Team & Protection" },
-                { name: "Anti-Doping & Course Planning", value: 41500, category: "National Team & Protection" },
-                { name: "Seed Project", value: 780000, category: "Education & Dev" },
-                { name: "Referee Workshop", value: 403000, category: "Education & Dev" },
-                { name: "Coach Workshop", value: 250000, category: "Education & Dev" },
-                { name: "Scholarships", value: 700000, category: "Education & Dev" },
-                { name: "School Development Plan", value: 1000000, category: "Education & Dev" },
-                { name: "Equip. Proc. - Nat. Team", value: 2500000, category: "Procurement & Admin" },
-                { name: "Equip. Proc. - Development", value: 1300000, category: "Procurement & Admin" },
-                { name: "Accounting", value: 360000, category: "Procurement & Admin" },
-                { name: "Hardware, Souvenirs & Merch", value: 509500, category: "Procurement & Admin" },
-                { name: "Intl. Org. Fees", value: 200000, category: "Procurement & Admin" },
-                { name: "Misc (Freight, Vehicle, etc.)", value: 520000, category: "Procurement & Admin" },
-                { name: "Consumables", value: 538789, category: "Procurement & Admin" },
-                { name: "Software Platform", value: 500000, category: "Procurement & Admin" },
-                { name: "Public Relations", value: 495000, category: "Procurement & Admin" }
+            // Master Dataset: 2026 Budget vs 2025 Actuals (in TWD)
+            const financialData = [
+                { name: "Tournament Scheduling", budget2026: 23140980, actual2025: 18276664, category: "National Teams and Intl. Tournaments" },
+                { name: "Regional Development Plan", budget2026: 899244, actual2025: 301669, category: "Office & Regional" },
+                { name: "Office Expenses", budget2026: 4658544, actual2025: 2343634, category: "Office & Regional" },
+                { name: "Inter-school League Prelims", budget2026: 411550, actual2025: 279350, category: "Domestic Ops" },
+                { name: "X League", budget2026: 1250000, actual2025: 684553, category: "Domestic Ops" },
+                { name: "BMC", budget2026: 2301200, actual2025: 1629020, category: "Domestic Ops" },
+                { name: "LIT", budget2026: 2300000, actual2025: 2564955, category: "Domestic Ops" },
+                { name: "Human Resources", budget2026: 29800000, actual2025: 28000000, category: "Personnel & Admin" },
+                { name: "Nat. Team Heritage Venue", budget2026: 1634400, actual2025: 1700330, category: "National Team & Protection" },
+                { name: "Physical Fitness Plan (SNC)", budget2026: 108000, actual2025: 682093, category: "National Team & Protection" },
+                { name: "Athletic Training", budget2026: 360480, actual2025: 167700, category: "National Team & Protection" },
+                { name: "Medical Treatment", budget2026: 70000, actual2025: 91400, category: "National Team & Protection" },
+                { name: "Anti-Doping & Course Planning", budget2026: 41500, actual2025: 0, category: "National Team & Protection" },
+                { name: "Seed Project", budget2026: 780000, actual2025: 217000, category: "Education & Dev" },
+                { name: "Referee Workshop", budget2026: 403000, actual2025: 367426, category: "Education & Dev" },
+                { name: "Coach Workshop", budget2026: 250000, actual2025: 126977, category: "Education & Dev" },
+                { name: "Scholarships", budget2026: 700000, actual2025: 489500, category: "Education & Dev" },
+                { name: "School Development Plan", budget2026: 1000000, actual2025: 706500, category: "Education & Dev" },
+                { name: "Equip. Proc. - Nat. Team", budget2026: 2500000, actual2025: 265875, category: "Procurement & Admin" },
+                { name: "Equip. Proc. - Development", budget2026: 1300000, actual2025: 897836, category: "Procurement & Admin" },
+                { name: "Accounting", budget2026: 360000, actual2025: 300000, category: "Procurement & Admin" },
+                { name: "Hardware, Souvenirs & Merch", budget2026: 509500, actual2025: 320429, category: "Procurement & Admin" },
+                { name: "Intl. Org. Fees", budget2026: 200000, actual2025: 171500, category: "Procurement & Admin" },
+                { name: "Misc (Freight, Vehicle, etc.)", budget2026: 520000, actual2025: 600000, category: "Procurement & Admin" },
+                { name: "Consumables", budget2026: 538789, actual2025: 216729, category: "Procurement & Admin" },
+                { name: "Software Platform", budget2026: 500000, actual2025: 500000, category: "Procurement & Admin" },
+                { name: "Public Relations", budget2026: 495000, actual2025: 83032, category: "Procurement & Admin" }
             ];
 
-            const totalIncome = useMemo(() => incomeData.reduce((acc, curr) => acc + curr.value, 0), []);
-            const totalExpenses = useMemo(() => expenseData.reduce((acc, curr) => acc + curr.value, 0), []);
+            const totalIncomeUSD = useMemo(() => incomeData.reduce((acc, curr) => acc + curr.value, 0), []);
+            const totalBudget2026 = useMemo(() => financialData.reduce((acc, curr) => acc + curr.budget2026, 0), []);
+            const totalActual2025 = useMemo(() => financialData.reduce((acc, curr) => acc + curr.actual2025, 0), []);
 
             const categorySummary = useMemo(() => {
                 const summary = {};
-                expenseData.forEach(item => {
-                    summary[item.category] = (summary[item.category] || 0) + item.value;
+                financialData.forEach(item => {
+                    if (!summary[item.category]) {
+                        summary[item.category] = { budget2026: 0, actual2025: 0 };
+                    }
+                    summary[item.category].budget2026 += item.budget2026;
+                    summary[item.category].actual2025 += item.actual2025;
                 });
-                return Object.entries(summary).sort((a, b) => b[1] - a[1]);
+                return Object.entries(summary).sort((a, b) => b[1].budget2026 - a[1].budget2026);
             }, []);
 
-            const sortedExpenses = useMemo(() => [...expenseData].sort((a, b) => b.value - a.value), []);
-
-            const formatTWD = (val) => {
-                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'TWD', maximumFractionDigits: 0 }).format(val);
-            };
-
-            const formatUSD = (val) => {
-                return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
-            };
+            const formatTWD = (val) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'TWD', maximumFractionDigits: 0 }).format(val);
+            const formatUSD = (val) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 }).format(val);
 
             const getCategoryColor = (cat) => {
                 const colors = {
                     "Personnel & Admin": "bg-blue-600",
-                    "Intl. Tournaments": "bg-indigo-600",
+                    "National Teams and Intl. Tournaments": "bg-indigo-600",
                     "Domestic Ops": "bg-emerald-500",
                     "Office & Regional": "bg-amber-500",
                     "National Team & Protection": "bg-rose-500",
@@ -179,162 +174,192 @@
                 return colors[cat] || "bg-gray-400";
             };
 
-            const getCategoryIconName = (cat) => {
+            const getCategoryIcon = (cat) => {
                 switch(cat) {
-                    case "Personnel & Admin": return "Users";
-                    case "Intl. Tournaments": return "Globe";
-                    case "Domestic Ops": return "Trophy";
-                    case "Office & Regional": return "Building2";
-                    case "National Team & Protection": return "ShieldCheck";
-                    case "Education & Dev": return "TrendingUp";
-                    default: return "Settings";
+                    case "Personnel & Admin": return <Icon name="Users" />;
+                    case "National Teams and Intl. Tournaments": return <Icon name="Globe" />;
+                    case "Domestic Ops": return <Icon name="Trophy" />;
+                    case "Office & Regional": return <Icon name="Building2" />;
+                    case "National Team & Protection": return <Icon name="ShieldCheck" />;
+                    case "Education & Dev": return <Icon name="TrendingUp" />;
+                    default: return <Icon name="Activity" />;
                 }
             };
 
             return (
                 <div className="min-h-screen p-4 md:p-8 text-slate-900 font-sans">
-                    <div className="max-w-6xl mx-auto space-y-8">
+                    <div className="max-w-6xl mx-auto space-y-10">
                         
-                        {/* Header */}
-                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                        {/* Header Section */}
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                             <div>
-                                <h1 className="text-3xl font-bold text-slate-800 tracking-tight">2026 Annual Budget Analysis Dashboard</h1>
-                                <p className="text-slate-500 mt-1 flex items-center gap-2 font-medium">
-                                    Annual expenditure details and overview of income planning
+                                <h1 className="text-4xl font-black text-slate-800 tracking-tight">Financial Report</h1>
+                                <p className="text-slate-500 mt-2 font-semibold flex items-center gap-2">
+                                    <Icon name="Activity" className="text-indigo-500" size={20} />
+                                    Reviewing 2025 Actual Expenditures against 2026 Budget Planning
                                 </p>
                             </div>
                         </div>
 
-                        {/* Expense Summary Card */}
-                        <div className="expense-gradient p-8 rounded-[2.5rem] shadow-xl text-white">
-                            <div className="flex justify-between items-start">
-                                <div>
-                                    <p className="text-sm font-bold uppercase tracking-widest opacity-80 mb-2">Total 2026 Expenditure Budget</p>
-                                    <h2 className="text-5xl font-black leading-none">{formatTWD(totalExpenses)}</h2>
+                        {/* Executive Summary Cards */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div className="budget-gradient p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+                                    <Icon name="BarChart" size={120} />
                                 </div>
-                                <div className="p-4 bg-white bg-opacity-20 rounded-2xl">
-                                    <Icon name="BarChart" size={32} />
+                                <div className="relative z-10">
+                                    <p className="text-sm font-bold uppercase tracking-widest opacity-80 mb-2">Total 2026 Budget Plan</p>
+                                    <h2 className="text-5xl font-black leading-none mb-6">{formatTWD(totalBudget2026)}</h2>
+                                    <div className="flex items-center gap-2 text-xs font-bold bg-white bg-opacity-20 w-fit px-3 py-1 rounded-full">
+                                        <Icon name="ArrowUpRight" size={14} />
+                                        <span>+ {(((totalBudget2026 - totalActual2025) / totalActual2025) * 100).toFixed(1)}% Growth from 2025</span>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="mt-8 flex gap-6 text-xs font-bold opacity-70 italic border-t border-white border-opacity-20 pt-4">
-                                <span>Expense Items: {expenseData.length}</span>
-                                <span>Currency: New Taiwan Dollar (TWD)</span>
+
+                            <div className="actual-gradient p-8 rounded-[2.5rem] shadow-2xl text-white relative overflow-hidden group">
+                                <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:scale-110 transition-transform">
+                                    <Icon name="History" size={120} />
+                                </div>
+                                <div className="relative z-10">
+                                    <p className="text-sm font-bold uppercase tracking-widest opacity-80 mb-2">Total 2025 Actual Spending</p>
+                                    <h2 className="text-5xl font-black leading-none mb-6">{formatTWD(totalActual2025)}</h2>
+                                    <div className="text-xs font-bold bg-black bg-opacity-10 w-fit px-3 py-1 rounded-full">
+                                        Validated Audited Figure (TWD)
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        {/* 2026 Budget Core Analysis */}
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                            {/* Category Distribution */}
-                            <div className="lg:col-span-1 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col">
-                                <div className="flex items-center gap-2 mb-6">
-                                    <Icon name="PieChart" className="text-rose-500" />
-                                    <h2 className="text-xl font-bold">Category Distribution</h2>
-                                </div>
-                                <div className="space-y-4 flex-grow">
-                                    {categorySummary.map(([category, value]) => (
-                                        <div key={category}>
-                                            <div className="flex justify-between items-end mb-1">
-                                                <span className="text-xs font-bold text-slate-600 flex items-center gap-2">
+                        {/* Comparative Distribution Analysis */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            
+                            {/* Distribution by Category */}
+                            <div className="lg:col-span-1 bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
+                                <h3 className="text-xl font-black text-slate-800 mb-8 flex items-center gap-2">
+                                    <Icon name="PieChart" className="text-indigo-600" />
+                                    Categorical Comparison
+                                </h3>
+                                <div className="space-y-8">
+                                    {categorySummary.map(([category, vals]) => (
+                                        <div key={category} className="space-y-2">
+                                            <div className="flex justify-between items-end">
+                                                <span className="text-xs font-black uppercase text-slate-500 tracking-wider flex items-center gap-2">
                                                     <span className={`w-2 h-2 rounded-full ${getCategoryColor(category)}`}></span>
                                                     {category}
                                                 </span>
-                                                <span className="text-[10px] font-mono text-slate-400">
-                                                    {((value / totalExpenses) * 100).toFixed(1)}%
-                                                </span>
                                             </div>
-                                            <div className="w-full bg-slate-100 rounded-full h-1.5 overflow-hidden">
-                                                <div 
-                                                    className={`${getCategoryColor(category)} h-full transition-all duration-1000`}
-                                                    style={{ width: `${(value / totalExpenses) * 100}%` }}
-                                                ></div>
-                                            </div>
-                                            <div className="text-right mt-1">
-                                                <span className="text-[11px] font-bold text-slate-500">{formatTWD(value)}</span>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Rankings */}
-                            <div className="lg:col-span-2 bg-white p-6 rounded-3xl shadow-sm border border-slate-100 h-[480px] flex flex-col">
-                                <div className="flex items-center justify-between mb-6">
-                                    <div className="flex items-center gap-2">
-                                        <Icon name="Trophy" className="text-amber-500" />
-                                        <h2 className="text-xl font-bold">Top Expenditure Rankings</h2>
-                                    </div>
-                                    <span className="text-xs text-slate-400 font-bold uppercase tracking-tight font-mono">Top Expenditures</span>
-                                </div>
-                                <div className="overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-                                    {sortedExpenses.map((item, idx) => (
-                                        <div key={item.name} className="flex items-center gap-4 p-3 hover:bg-slate-50 rounded-2xl transition-all border border-transparent hover:border-slate-100">
-                                            <span className="w-8 h-8 flex items-center justify-center bg-slate-100 text-slate-500 rounded-lg text-xs font-black">
-                                                {idx + 1}
-                                            </span>
-                                            <div className="flex-grow min-w-0">
-                                                <div className="flex justify-between items-start mb-1">
-                                                    <h3 className="text-sm font-bold truncate pr-4 text-slate-700">{item.name}</h3>
-                                                    <span className="text-sm font-black text-slate-900 whitespace-nowrap">{formatTWD(item.value)}</span>
-                                                </div>
+                                            <div className="space-y-1">
+                                                {/* 2026 Budget Bar */}
                                                 <div className="flex items-center gap-2">
-                                                    <span className={`px-2 py-0.5 rounded text-[9px] font-bold text-white uppercase ${getCategoryColor(item.category)}`}>
-                                                        {item.category}
-                                                    </span>
+                                                    <div className="flex-grow bg-slate-100 rounded-full h-2 overflow-hidden">
+                                                        <div 
+                                                            className={`${getCategoryColor(category)} h-full opacity-90`}
+                                                            style={{ width: `${(vals.budget2026 / totalBudget2026) * 100}%` }}
+                                                        ></div>
+                                                    </div>
+                                                    <span className="text-[10px] font-bold text-slate-600 w-12 text-right">2026</span>
                                                 </div>
+                                                {/* 2025 Actual Bar */}
+                                                <div className="flex items-center gap-2">
+                                                    <div className="flex-grow bg-slate-100 rounded-full h-2 overflow-hidden">
+                                                        <div 
+                                                            className={`${getCategoryColor(category)} h-full opacity-40`}
+                                                            style={{ width: `${(vals.actual2025 / totalActual2025) * 100}%` }}
+                                                        ></div>
+                                                    </div>
+                                                    <span className="text-[10px] font-bold text-slate-400 w-12 text-right">2025</span>
+                                                </div>
+                                            </div>
+                                            <div className="flex justify-between text-[11px] font-mono text-slate-400">
+                                                <span>Budget: {formatTWD(vals.budget2026)}</span>
+                                                <span>Actual: {formatTWD(vals.actual2025)}</span>
                                             </div>
                                         </div>
                                     ))}
                                 </div>
                             </div>
-                        </div>
 
-                        {/* Detailed Category Cards */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                            {categorySummary.map(([category, total]) => (
-                                <div key={category} className="bg-white p-5 rounded-3xl shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <div className={`p-2 rounded-xl bg-opacity-10 ${getCategoryColor(category).replace('bg-', 'text-')} ${getCategoryColor(category).replace('bg-', 'bg-')}`}>
-                                            <Icon name={getCategoryIconName(category)} />
-                                        </div>
-                                        <span className="text-[10px] font-black text-rose-500 bg-rose-50 px-2 py-0.5 rounded-full">{((total / totalExpenses) * 100).toFixed(1)}%</span>
-                                    </div>
-                                    <h3 className="text-sm font-bold text-slate-800 leading-tight h-10 flex items-center">{category}</h3>
-                                    <p className="text-xl font-black text-slate-900 mt-1">{formatTWD(total)}</p>
+                            {/* Detailed Rankings Table */}
+                            <div className="lg:col-span-2 bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100 flex flex-col h-[650px]">
+                                <h3 className="text-xl font-black text-slate-800 mb-6 flex items-center gap-2">
+                                    <Icon name="Trophy" className="text-amber-500" />
+                                    Expenditure Ranking Top 15
+                                </h3>
+                                <div className="overflow-y-auto pr-2 custom-scrollbar flex-grow">
+                                    <table className="w-full text-left">
+                                        <thead className="sticky top-0 bg-white z-20 text-[10px] uppercase font-black text-slate-400 tracking-widest border-b pb-4">
+                                            <tr>
+                                                <th className="py-4"># Rank</th>
+                                                <th className="py-4">Line Item</th>
+                                                <th className="py-4 text-right">2026 Budget</th>
+                                                <th className="py-4 text-right">2025 Actual</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-slate-50">
+                                            {financialData.sort((a,b) => b.budget2026 - a.budget2026).slice(0, 15).map((item, idx) => (
+                                                <tr key={item.name} className="hover:bg-slate-50 transition-colors">
+                                                    <td className="py-5">
+                                                        <span className="bg-slate-100 text-slate-500 font-black px-2 py-1 rounded-md text-[10px]">
+                                                            {String(idx + 1).padStart(2, '0')}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-5 pr-4">
+                                                        <p className="text-sm font-bold text-slate-700 leading-tight">{item.name}</p>
+                                                        <span className={`text-[9px] font-black uppercase px-1.5 py-0.5 rounded ${getCategoryColor(item.category)} text-white mt-1 inline-block`}>
+                                                            {item.category}
+                                                        </span>
+                                                    </td>
+                                                    <td className="py-5 text-right font-black text-slate-900 text-sm">
+                                                        {formatTWD(item.budget2026)}
+                                                    </td>
+                                                    <td className="py-5 text-right font-bold text-slate-400 text-sm">
+                                                        {formatTWD(item.actual2025)}
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
                                 </div>
-                            ))}
+                            </div>
+
                         </div>
 
-                        {/* Income Planning Section (At Bottom, in USD) */}
-                        <div className="bg-white p-10 rounded-[3rem] shadow-sm border border-slate-100 mt-12 income-card-bg">
-                            <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="p-3 bg-indigo-600 rounded-2xl text-white shadow-lg shadow-indigo-200">
-                                        <Icon name="DollarSign" size={24} />
+                        {/* Income Source Planning Section */}
+                        <div className="bg-white p-12 rounded-[3.5rem] shadow-sm border border-slate-100 income-card-bg">
+                            <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                                <div className="flex items-center gap-4">
+                                    <div className="p-4 bg-indigo-600 rounded-3xl text-white shadow-xl shadow-indigo-100">
+                                        <Icon name="DollarSign" size={32} />
                                     </div>
                                     <div>
-                                        <h3 className="text-2xl font-black text-slate-800">Income Planning Sources</h3>
-                                        <p className="text-sm font-bold text-indigo-500 uppercase tracking-widest mt-1">Income Planning (USD)</p>
+                                        <h3 className="text-3xl font-black text-slate-800 tracking-tight">Income Planning</h3>
+                                        <p className="text-sm font-bold text-indigo-500 uppercase tracking-widest mt-1">Sustainability Targets (USD)</p>
                                     </div>
                                 </div>
-                                <div className="text-right bg-white px-6 py-4 rounded-2xl border border-indigo-50 shadow-sm">
-                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Total Planned Income (USD)</p>
-                                    <p className="text-3xl font-black text-indigo-600">{formatUSD(totalIncome)}</p>
+                                <div className="bg-white p-6 rounded-[2rem] border border-indigo-50 shadow-sm text-right min-w-[280px]">
+                                    <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Combined Target (USD)</p>
+                                    <p className="text-4xl font-black text-indigo-600 tracking-tighter">{formatUSD(totalIncomeUSD)}</p>
                                 </div>
                             </div>
-                            
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                 {incomeData.map(item => (
-                                    <div key={item.name} className="p-6 bg-white rounded-3xl border border-slate-50 hover:border-indigo-200 transition-all shadow-sm text-center md:text-left">
-                                        <div className="flex justify-between items-start mb-4">
-                                            <span className="text-[10px] font-black text-indigo-400 uppercase tracking-widest">{item.category}</span>
-                                            <span className="text-xs font-mono text-slate-300 font-bold">{((item.value / totalIncome) * 100).toFixed(1)}%</span>
+                                    <div key={item.name} className="p-8 bg-white rounded-[2.5rem] border border-slate-50 hover:border-indigo-200 hover:shadow-xl transition-all group">
+                                        <div className="flex justify-between items-start mb-6">
+                                            <span className="text-[10px] font-black text-indigo-400 bg-indigo-50 px-3 py-1 rounded-full uppercase tracking-widest">
+                                                {item.category}
+                                            </span>
+                                            <span className="text-xs font-mono text-slate-300 font-bold group-hover:text-indigo-600 transition-colors">
+                                                {((item.value / totalIncomeUSD) * 100).toFixed(1)}%
+                                            </span>
                                         </div>
-                                        <h4 className="text-base font-bold text-slate-700 mb-2">{item.name}</h4>
-                                        <p className="text-2xl font-black text-indigo-600">{formatUSD(item.value)}</p>
-                                        <div className="w-full bg-slate-100 rounded-full h-1.5 mt-5 overflow-hidden">
+                                        <h4 className="text-lg font-black text-slate-800 mb-2 leading-tight">{item.name}</h4>
+                                        <p className="text-3xl font-black text-indigo-600 tracking-tight">{formatUSD(item.value)}</p>
+                                        <div className="w-full bg-slate-100 rounded-full h-2 mt-6 overflow-hidden">
                                             <div 
-                                                className="bg-indigo-500 h-full rounded-full transition-all duration-1000"
-                                                style={{ width: `${(item.value / totalIncome) * 100}%` }}
+                                                className="bg-indigo-600 h-full transition-all duration-1000 ease-out"
+                                                style={{ width: `${(item.value / totalIncomeUSD) * 100}%` }}
                                             ></div>
                                         </div>
                                     </div>
@@ -342,9 +367,10 @@
                             </div>
                         </div>
 
-                        <div className="flex items-center gap-2 text-slate-400 text-xs px-2 pb-12">
-                            <Icon name="Info" size={14} />
-                            <p>This dashboard prioritizes the 2026 budget structure. Income planning is presented in <strong>USD</strong> for reference only.</p>
+                        {/* Footer Info */}
+                        <div className="flex items-center gap-3 text-slate-400 text-[11px] font-bold uppercase tracking-widest px-4 pb-20">
+                            <Icon name="Info" size={16} />
+                            <p>Data Source: 2025 Audited Internal Ledger & 2026 Strategic Planning. Figures in TWD (Expense) & USD (Income).</p>
                         </div>
                     </div>
                 </div>
